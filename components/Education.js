@@ -119,8 +119,8 @@ const Education = () => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Qualification</SelectLabel>
-                  <SelectItem value="Bachelor's">Bachelor's</SelectItem>
-                  <SelectItem value="Master's">Master's</SelectItem>
+                  <SelectItem value="Bachelor's">Bachelor`s</SelectItem>
+                  <SelectItem value="Master's">Master`s</SelectItem>
                   <SelectItem value="PhD">PhD</SelectItem>
                   <SelectItem value="Diploma">Diploma</SelectItem>
                   <SelectItem value="Certificate">Certificate</SelectItem>
