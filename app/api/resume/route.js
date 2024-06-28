@@ -1,20 +1,31 @@
-// app/api/resume/route.js
 import { resumeSchema } from '../../../lib/resume'
 import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
+import { ObjectId } from 'mongodb'
 
 const prisma = new PrismaClient()
 
 export async function POST(request) {
   const body = await request.json()
+  console.log('Received payload:', body)
 
   try {
     const resumeData = resumeSchema.parse(body)
+
+    // Check if email is unique
+    const existingResume = await prisma.resume.findUnique({
+      where: { email: resumeData.email },
+    })
+    if (existingResume) {
+      return NextResponse.json({ message: 'Email already exists' }, { status: 400 })
+    }
 
     const resume = await prisma.resume.create({
       data: {
         name: resumeData.name,
         email: resumeData.email,
+        dateOfBirth: resumeData.dateOfBirth,
+        addrss: resumeData.address,
         workExperience: {
           create: resumeData.experience.map((exp) => ({
             company: exp.company,
@@ -57,11 +68,33 @@ export async function POST(request) {
 
     return NextResponse.json({ message: 'Resume saved successfully' }, { status: 200 })
   } catch (error) {
+    console.error('Error saving resume:', error)
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ message: 'Invalid resume data' }, { status: 400 })
+      return NextResponse.json({ message: 'Invalid resume data', errors: error.issues }, { status: 400 })
+    }
+    return NextResponse.json({ message: 'Error saving resume' }, { status: 500 })
+  }
+}
+
+export async function GET() {
+  try {
+    const resume = await prisma.resume.findFirst({
+      include: {
+        workExperience: true,
+        education: true,
+        skills: true,
+        contacts: true,
+        projects: true,
+      },
+    })
+
+    if (!resume) {
+      return NextResponse.json({ message: 'Resume not found' }, { status: 404 })
     }
 
-    console.error(error)
-    return NextResponse.json({ message: 'Error saving resume' }, { status: 500 })
+    return NextResponse.json(resume, { status: 200 })
+  } catch (error) {
+    console.error('Error fetching resume:', error)
+    return NextResponse.json({ message: 'Error fetching resume' }, { status: 500 })
   }
 }

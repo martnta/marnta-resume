@@ -1,26 +1,24 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
-const Skills = () => {
-  const [skills, setSkills] = useState([''])
-
+const Skills = ({ skills, onChange }) => {
   const addSkill = () => {
-    setSkills([...skills, ''])
-  }
+    onChange([...skills, '']);
+  };
 
   const removeSkill = (index) => {
-    const newSkills = [...skills]
-    newSkills.splice(index, 1)
-    setSkills(newSkills)
-  }
+    const newSkills = [...skills];
+    newSkills.splice(index, 1);
+    onChange(newSkills);
+  };
 
   const updateSkill = (index, value) => {
-    const newSkills = [...skills]
-    newSkills[index] = value
-    setSkills(newSkills)
-  }
+    const newSkills = [...skills];
+    newSkills[index] = value;
+    onChange(newSkills);
+  };
 
   return (
     <div className="space-y-4">
@@ -40,7 +38,7 @@ const Skills = () => {
       </div>
       <Button onClick={addSkill}>Add Skill</Button>
     </div>
-  )
-}
+  );
+};
 
-export default Skills
+export default Skills;

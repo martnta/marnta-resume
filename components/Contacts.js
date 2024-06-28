@@ -4,23 +4,21 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-const Contacts = () => {
-  const [contacts, setContacts] = useState([{ type: '', value: '' }])
-
+const Contacts = ({contacts, onChange}) => {
   const addContact = () => {
-    setContacts([...contacts, { type: '', value: '' }])
+    onChange([...contacts, { type: '', value: '' }])
   }
 
   const removeContact = (index) => {
     const newContacts = [...contacts]
     newContacts.splice(index, 1)
-    setContacts(newContacts)
+    onChange(newContacts)
   }
 
   const updateContact = (index, field, value) => {
     const newContacts = [...contacts]
     newContacts[index][field] = value
-    setContacts(newContacts)
+    onChange(newContacts)
   }
 
   return (

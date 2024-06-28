@@ -16,6 +16,8 @@ datasource db {
 model Resume {
   id           String          @id @default(auto()) @map("_id") @db.ObjectId
   name         String
+  dateOfBirth  String
+  address      String
   email        String          @unique
   workExperience WorkExperience[]
   education    Education[]
@@ -40,7 +42,7 @@ model WorkExperience {
 model Education {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   institution  String
-  qualification       String
+  qualification  String
   fieldOfStudy String
   startDate    DateTime
   endDate      DateTime?

@@ -1,27 +1,24 @@
-// Projects.jsx
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
-const Projects = () => {
-  const [projects, setProjects] = useState([{ name: '', description: '', startDate: '', endDate: '' }])
-
+const Projects = ({ projects, onChange }) => {
   const addProject = () => {
-    setProjects([...projects, { name: '', description: '', startDate: '', endDate: '' }])
-  }
+    onChange([...projects, { name: '', description: '', startDate: '', endDate: '' }]);
+  };
 
   const removeProject = (index) => {
-    const newProjects = [...projects]
-    newProjects.splice(index, 1)
-    setProjects(newProjects)
-  }
+    const newProjects = [...projects];
+    newProjects.splice(index, 1);
+    onChange(newProjects);
+  };
 
   const updateProject = (index, field, value) => {
-    const newProjects = [...projects]
-    newProjects[index][field] = value
-    setProjects(newProjects)
-  }
+    const newProjects = [...projects];
+    newProjects[index][field] = value;
+    onChange(newProjects);
+  };
 
   return (
     <div className="space-y-4">
@@ -42,12 +39,14 @@ const Projects = () => {
             <div className="flex space-x-2">
               <Input
                 value={project.startDate}
+                type='date'
                 onChange={(e) => updateProject(index, 'startDate', e.target.value)}
                 placeholder="Start Date"
               />
               <Input
                 value={project.endDate}
                 onChange={(e) => updateProject(index, 'endDate', e.target.value)}
+                type= 'date'
                 placeholder="End Date"
               />
             </div>
@@ -59,7 +58,7 @@ const Projects = () => {
       </div>
       <Button onClick={addProject}>Add Project</Button>
     </div>
-  )
-}
+  );
+};
 
-export default Projects
+export default Projects;

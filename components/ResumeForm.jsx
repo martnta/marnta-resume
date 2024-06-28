@@ -1,4 +1,5 @@
-'use client';
+"use client";
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,20 +18,14 @@ const ResumeForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    dateOfBirth: '',
+    address: '',
     experience: [],
     education: [],
     skills: [],
     projects: [],
     contacts: [],
   });
-  const [newExperience, setNewExperience] = useState({
-    company: '',
-    position: '',
-    startDate: '',
-    endDate: '',
-    description: '',
-  });
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const savedData = localStorage.getItem('resumeFormData');
@@ -54,7 +49,6 @@ const ResumeForm = () => {
   };
 
   const handleSubmit = async () => {
-    setIsLoading(true);
     try {
       const response = await fetch('/api/resume', {
         method: 'POST',
@@ -63,27 +57,23 @@ const ResumeForm = () => {
         },
         body: JSON.stringify(formData),
       });
+
       if (response.ok) {
         Swal.fire({
           icon: 'success',
           title: 'Success!',
           text: 'Resume saved successfully',
-          confirmButtonColor: '#3085d6',
         });
         localStorage.removeItem('resumeFormData');
       } else {
         throw new Error('Error saving resume');
       }
     } catch (error) {
-      console.error('Error saving resume:', error);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'An error occurred while saving your resume',
-        confirmButtonColor: '#3085d6',
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -98,8 +88,8 @@ const ResumeForm = () => {
     {
       title: 'Personal Information',
       component: (
-        <div className="space-y-4">
-          <Label>Name</Label>
+        <div className="space-y-3">
+          <Label>Fullname</Label>
           <Input
             value={formData.name}
             onChange={(e) => handleFormDataChange('name', e.target.value)}
@@ -108,6 +98,17 @@ const ResumeForm = () => {
           <Input
             value={formData.email}
             onChange={(e) => handleFormDataChange('email', e.target.value)}
+          />
+          <Label>Date of birth</Label>
+           <Input
+            value={formData.dateOfBirth}
+            onChange={(e) => handleFormDataChange('dateOfBirth', e.target.value)}
+            type='date'
+          />
+          <Label>Address</Label>
+           <Input
+            value={formData.address}
+            onChange={(e) => handleFormDataChange('address', e.target.value)}
           />
         </div>
       ),
@@ -118,8 +119,6 @@ const ResumeForm = () => {
         <WorkExperience
           experience={formData.experience}
           onChange={(experience) => handleFormDataChange('experience', experience)}
-          newExperience={newExperience}
-          setNewExperience={setNewExperience}
         />
       ),
     },
@@ -163,10 +162,7 @@ const ResumeForm = () => {
 
   return (
     <div className="max-w-3xl mx-auto mb-3 p-6 bg-white rounded-lg shadow-lg">
-      <Stepper
-        steps={formSections.map((section) => section.title)}
-        activeStep={currentStep}
-      />
+      <Stepper steps={formSections.map((section) => section.title)} activeStep={currentStep} />
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -183,18 +179,11 @@ const ResumeForm = () => {
       </AnimatePresence>
 
       <div className="flex justify-between mt-8">
-        <Button
-          variant="outline"
-          onClick={handlePrev}
-          disabled={currentStep === 0}
-        >
+        <Button variant="outline" onClick={handlePrev} disabled={currentStep === 0}>
           Previous
         </Button>
-
         {currentStep === formSections.length - 1 ? (
-          <Button onClick={handleSubmit} disabled={isLoading}>
-            {isLoading ? 'Submitting...' : 'Submit'}
-          </Button>
+          <Button onClick={handleSubmit}>Submit</Button>
         ) : (
           <Button onClick={handleNext}>Next</Button>
         )}

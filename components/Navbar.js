@@ -22,21 +22,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`w-full z-50 fixed top-0 transition-all duration-300 ${scrolled ? 'bg-blue-600 shadow-lg' : 'bg-blue-500'}`}>
+    <nav className={`w-full z-50 fixed top-0 transition-all duration-300 ${scrolled ? 'bg-purple-600 shadow-lg' : 'bg-white shadow-md'}`}>
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <div className="text-2xl font-bold text-white">
+        <div className="text-2xl   text-white">
           <Link href="/">
-            CodePipe Resume
+           <span className={`${scrolled ?'text-white' : 'text-purple-700'} font-semibold`}>Code</span><span className={`${scrolled ?"text-blue-400": 'text-blue-800' } font-semibold`}>Pipe</span>  <span className={`${scrolled ?"text-blue-200": 'text-blue-800'} font-semibold`}>Resume</span> 
           </Link>
         </div>
         <div className="hidden md:flex space-x-6">
-          {['About', 'Contact'].map((item) => (
+          {[ 'Build','Preview','About', 'Contact'].map((item) => (
             <motion.div
               key={item}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
-              <Link href={`/${item.toLowerCase()}`} className="text-white hover:text-blue-200 transition-colors">
+              <Link href={`/${item.toLowerCase()}`} className={`${ scrolled ? 'text-white hover:text-blue-100' : 'text-blue-800 hover:text-blue-400'} transition-colors`}>
                 {item}
               </Link>
             </motion.div>
@@ -62,7 +62,7 @@ const Navbar = () => {
             exit="hidden"
             variants={menuVariants}
           >
-            {['About', 'Contact'].map((item) => (
+            {['Build','Preview','About', 'Contact'].map((item) => (
               <div key={item}>
                 <Link href={`/${item.toLowerCase()}`} className="block py-3 px-4 text-white">
                   {item}
